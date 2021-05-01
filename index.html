@@ -10,8 +10,21 @@
 
     <script src="node_modules/tone/build/Tone.js"></script>
     <script src="index.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    
+    <div id="control_panel">
+        <h1>Cursorophone</h1>
+        <div class="option">
+            <label for="min_semitone_input">Min Semitone (A4 = 0)</label><input id="min_semitone_input" type="number" step="1"/>
+        </div>
+        <div class="option">
+            <label for="max_semitone_input">Max Semitone (A4 = 0)</label><input id="max_semitone_input" type="number" step="1"/>
+        </div>
+    </div>
+    <div id="sound_controller">
+        <canvas id="sound_canvas"></canvas>
+    </div>
 </body>
 </html>

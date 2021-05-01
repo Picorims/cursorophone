@@ -1,0 +1,43 @@
+/* Copyright (c) 2021 Picorims - MIT license */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+    color: #eee;
+}
+
+#control_panel {
+    width: 350px;
+    height: 100vh;
+    background-color: #111;
+    padding: 20px;
+    flex: 0 0 auto;
+    border-right: 5px solid #eee;
+}
+
+#sound_controller {
+    width: calc(100% - 350px);
+    height: 100vh;
+    background-color: #050505;
+    flex: 1 1 auto;
+}
+
+.option {
+    width: 100%;
+    margin: 10px 0;
+    border-top: 5px solid #444;
+}
