@@ -1,0 +1,26 @@
+{
+  "name": "cursorophone",
+  "version": "1.0.0",
+  "description": "tonejs experiment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Picorims/cursorophone.git"
+  },
+  "keywords": [
+    "music",
+    "instrument"
+  ],
+  "author": "Picorims",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Picorims/cursorophone/issues"
+  },
+  "homepage": "https://github.com/Picorims/cursorophone#readme",
+  "dependencies": {
+    "tone": "^14.7.77"
+  }
+}
