@@ -20,14 +20,9 @@ body {
     color: #eee;
 }
 
-#control_panel {
-    width: 350px;
-    height: 100vh;
-    background-color: #111;
-    padding: 20px;
-    flex: 0 0 auto;
-    border-right: 5px solid #eee;
-}
+
+
+
 
 #sound_controller {
     width: calc(100% - 350px);
@@ -36,8 +31,40 @@ body {
     flex: 1 1 auto;
 }
 
+
+
+
+
+#control_panel {
+    width: 350px;
+    height: 100vh;
+    background-color: #111;
+    padding: 20px;
+    flex: 0 0 auto;
+    border-right: 5px solid #eee;
+    overflow-y: scroll;
+}
+
 .option {
     width: 100%;
     margin: 10px 0;
     border-top: 5px solid #444;
+}
+
+#note_toggler_container {
+    width: 100%;
+}
+.note_toggler {
+    position: relative;
+    width: 100%;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+}
+.note_toggler input {
+    width: 20px;
+    height: 20px;
+}
+.note_toggler span {
+    width: 30px;
 }

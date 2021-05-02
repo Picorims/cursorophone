@@ -17,10 +17,63 @@
     <div id="control_panel">
         <h1>Cursorophone</h1>
         <div class="option">
-            <label for="min_semitone_input">Min Semitone (A4 = 0)</label><input id="min_semitone_input" type="number" step="1"/>
+            <label for="min_octave_input">Min Octave (A4 to G#5 = 0)</label><input id="min_semitone_input" type="number" step="1"/>
         </div>
         <div class="option">
-            <label for="max_semitone_input">Max Semitone (A4 = 0)</label><input id="max_semitone_input" type="number" step="1"/>
+            <label for="max_octave_input">Max Octave (A4 to G#5 = 0)</label><input id="max_semitone_input" type="number" step="1"/>
+        </div>
+        <div class="option">
+            <span>Active notes: </span>
+            <div id="note_toggler_container">
+                <div class="note_toggler note_A">
+                    <span>A</span>
+                    <input id="note_toggler_checkbox0" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_A#">
+                    <span>A#</span>
+                    <input id="note_toggler_checkbox1" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_B">
+                    <span>B</span>
+                    <input id="note_toggler_checkbox2" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_C">
+                    <span>C</span>
+                    <input id="note_toggler_checkbox3" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_C#">
+                    <span>C#</span>
+                    <input id="note_toggler_checkbox4" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_D">
+                    <span>D</span>
+                    <input id="note_toggler_checkbox5" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_D#">
+                    <span>D#</span>
+                    <input id="note_toggler_checkbox6" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_E">
+                    <span>E</span>
+                    <input id="note_toggler_checkbox7" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_F">
+                    <span>F</span>
+                    <input id="note_toggler_checkbox8" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_F#">
+                    <span>F#</span>
+                    <input id="note_toggler_checkbox9" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_G">
+                    <span>G</span>
+                    <input id="note_toggler_checkbox10" type="checkbox"/>
+                </div>
+                <div class="note_toggler note_G#">
+                    <span>G#</span>
+                    <input id="note_toggler_checkbox11" type="checkbox"/>
+                </div>
+            </div>
         </div>
     </div>
     <div id="sound_controller">
