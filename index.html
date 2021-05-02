@@ -17,10 +17,10 @@
     <div id="control_panel">
         <h1>Cursorophone</h1>
         <div class="option">
-            <label for="min_octave_input">Min Octave (A4 to G#5 = 0)</label><input id="min_semitone_input" type="number" step="1"/>
+            <label for="min_octave_input">Min Octave (A4 to G#5 = 0): </label><input id="min_semitone_input" type="number" step="1"/>
         </div>
         <div class="option">
-            <label for="max_octave_input">Max Octave (A4 to G#5 = 0)</label><input id="max_semitone_input" type="number" step="1"/>
+            <label for="max_octave_input">Max Octave (A4 to G#5 = 0): </label><input id="max_semitone_input" type="number" step="1"/>
         </div>
         <div class="option">
             <span>Active notes: </span>
@@ -74,6 +74,24 @@
                     <input id="note_toggler_checkbox11" type="checkbox"/>
                 </div>
             </div>
+        </div>
+        <div class="option">
+            <label for="portamento_input">Portamento: </label><input id="portamento_input" type="number" step="0.01"/>
+        </div>
+        <div class="option">
+            <label for="oscillator_type_select">Oscillator type: </label>
+            <select id="oscillator_type_select">
+                <option value="sine">sine</option>
+                <option value="square">square</option>
+                <option value="sawtooth">sawtooth</option>
+                <option value="triangle">triangle</option>
+            </select>
+        </div>
+        <div class="option">
+            <label for="attack_input">Attack: </label><input id="attack_input" type="number" step="0.01" min="0" max="2"/>
+            <label for="decay_input">Decay: </label><input id="decay_input" type="number" step="0.01" min="0" max="2"/>
+            <label for="sustain_input">Sustain: </label><input id="sustain_input" type="number" step="0.01"/>
+            <label for="release_input">Release: </label><input id="release_input" type="number" step="0.01" min="0" max="5"/>
         </div>
     </div>
     <div id="sound_controller">

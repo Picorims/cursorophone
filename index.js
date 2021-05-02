@@ -15,6 +15,18 @@ let defaultConfig = {
     minOutputOctave: -3, //A4 to G#5 = 0
     maxOutputOctave: 3,
     scale: [true,true,true,true,true,true,true,true,true,true,true,true], //a,a#,b,c,c#,d,d#,e,f,f#,g,g#
+    instrument: {
+        portamento: 0.06,
+        envelope: {
+            attack: 0.02, //0 to 2
+            decay: 0.1, //0 to 2
+            sustain: 0.8,
+            release: 0.5, //0 to 5
+        },
+        oscillator: {
+            type: "sine",
+        }
+    }
 };
 
 window.onload = function() {init()};
@@ -30,6 +42,7 @@ function init() {
 
     //init instrument
     instrument.player = new Tone.Synth().toDestination();
+    updateInstrumentSettings();
 
     //coordinates updating
     canvas.onmousemove = function(e) {
@@ -85,6 +98,52 @@ function init() {
 
 
 
+
+    //portamento option event
+    document.getElementById("portamento_input").value = config.instrument.portamento;
+    document.getElementById("portamento_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.portamento = parseFloat(this.value);
+    }
+
+
+
+
+    //oscillation type
+    document.getElementById("oscillator_type_select").value = config.instrument.oscillator.type;
+    document.getElementById("oscillator_type_select").onchange = function() {
+        config.instrument.oscillator.type = this.value;
+        updateInstrumentSettings();
+    }
+
+
+
+
+
+    //ADSR envelope option events
+    document.getElementById("attack_input").value = config.instrument.envelope.attack;
+    document.getElementById("attack_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.envelope.attack = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
+    document.getElementById("decay_input").value = config.instrument.envelope.decay;
+    document.getElementById("decay_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.envelope.decay = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
+    document.getElementById("sustain_input").value = config.instrument.envelope.sustain;
+    document.getElementById("sustain_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.envelope.sustain = parseInt(this.value);
+        updateInstrumentSettings();
+    }
+    document.getElementById("release_input").value = config.instrument.envelope.release;
+    document.getElementById("release_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.envelope.release = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
+
+
+
+
     //start animation
     requestAnimationFrame(draw);
 }
@@ -120,7 +179,7 @@ function updateNote() {
     //note frequency
     let tuning = 440;
     instrument.note = tuning * Math.pow(2, instrument.semitone/12);
-    if (instrument.active) instrument.player.frequency.rampTo(instrument.note, 0.06);
+    if (instrument.active) instrument.player.frequency.rampTo(instrument.note, config.instrument.portamento);
 }
 
 //find the nearest semitone matching the scale of the config.
@@ -176,6 +235,18 @@ function toggleInstrument(isActive) {
     } else {
         instrument.player.triggerRelease();
     }
+}
+
+//update instrument settings on the synthetizer from the config
+function updateInstrumentSettings() {
+    //ADSR envelope
+    instrument.player.envelope.attack = config.instrument.envelope.attack;
+    instrument.player.envelope.decay = config.instrument.envelope.decay;
+    instrument.player.envelope.sustain = config.instrument.envelope.sustain;
+    instrument.player.envelope.release = config.instrument.envelope.release;
+
+    //oscillator type
+    instrument.player.oscillator.type = config.instrument.oscillator.type;
 }
 
 
