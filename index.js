@@ -5,6 +5,9 @@ let mouseX = 0, mouseY = 0;
 
 let instrument = {
     player: null,
+    feedbackDelay: null,
+    reverb: null,
+    widener: null,
     semitone: 0,
     note: 0,
     active: false,
@@ -17,6 +20,7 @@ let defaultConfig = {
     scale: [true,true,true,true,true,true,true,true,true,true,true,true], //a,a#,b,c,c#,d,d#,e,f,f#,g,g#
     instrument: {
         portamento: 0.06,
+        volume: 0.5,
         envelope: {
             attack: 0.02, //0 to 2
             decay: 0.1, //0 to 2
@@ -24,7 +28,22 @@ let defaultConfig = {
             release: 0.5, //0 to 5
         },
         oscillator: {
-            type: "sine",
+            type: "triangle",
+        },
+        effect: {
+            feedbackDelay: {
+                speed: 8, //4n = every beat
+                feedback: 0.5, //0 to 1
+                dryWet: 0.4, //0 = 100% dry; 1 = 100% effected
+            },
+            reverb: {
+                preDelay: 0, //time before reverb ramp to full
+                decay: 30,
+                dryWet: 1,
+            },
+            widener: {
+                width: 0.8, //0 = mid, 1 = side, 0.5 = nothing changes
+            }
         }
     }
 };
@@ -41,7 +60,14 @@ function init() {
     ctx = canvas.getContext("2d");
 
     //init instrument
+    //instrument.player = new Tone.Synth();
     instrument.player = new Tone.Synth().toDestination();
+    instrument.feedbackDelay = new Tone.FeedbackDelay().toDestination();
+    instrument.reverb = new Tone.Reverb().toDestination();
+    instrument.widener = new Tone.StereoWidener().toDestination();
+    instrument.player.connect(instrument.feedbackDelay);
+    instrument.player.connect(instrument.reverb);
+    instrument.player.connect(instrument.widener);
     updateInstrumentSettings();
 
     //coordinates updating
@@ -132,7 +158,7 @@ function init() {
     }
     document.getElementById("sustain_input").value = config.instrument.envelope.sustain;
     document.getElementById("sustain_input").oninput = function() {
-        if (!isNaN(parseFloat(this.value))) config.instrument.envelope.sustain = parseInt(this.value);
+        if (!isNaN(parseFloat(this.value))) config.instrument.envelope.sustain = parseFloat(this.value);
         updateInstrumentSettings();
     }
     document.getElementById("release_input").value = config.instrument.envelope.release;
@@ -141,6 +167,45 @@ function init() {
         updateInstrumentSettings();
     }
 
+
+
+
+    //feedback delay option events
+    document.getElementById("feedback_delay_speed_input").value = config.instrument.effect.feedbackDelay.speed;
+    document.getElementById("feedback_delay_speed_input").oninput = function() {
+        if (!isNaN(parseInt(this.value))) config.instrument.effect.feedbackDelay.speed = parseInt(this.value);
+        updateInstrumentSettings();
+    }
+    document.getElementById("feedback_delay_feedback_input").value = config.instrument.effect.feedbackDelay.feedback;
+    document.getElementById("feedback_delay_feedback_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.effect.feedbackDelay.feedback = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
+    document.getElementById("feedback_delay_drywet_input").value = config.instrument.effect.feedbackDelay.dryWet;
+    document.getElementById("feedback_delay_drywet_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.effect.feedbackDelay.dryWet = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
+
+
+
+
+    //reverb options events
+    document.getElementById("reverb_predelay_input").value = config.instrument.effect.reverb.preDelay;
+    document.getElementById("reverb_predelay_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.effect.reverb.preDelay = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
+    document.getElementById("reverb_decay_input").value = config.instrument.effect.reverb.decay;
+    document.getElementById("reverb_decay_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.effect.reverb.decay = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
+    document.getElementById("reverb_drywet_input").value = config.instrument.effect.reverb.dryWet;
+    document.getElementById("reverb_drywet_input").oninput = function() {
+        if (!isNaN(parseFloat(this.value))) config.instrument.effect.reverb.dryWet = parseFloat(this.value);
+        updateInstrumentSettings();
+    }
 
 
 
@@ -178,8 +243,9 @@ function updateNote() {
 
     //note frequency
     let tuning = 440;
+    let older_note = instrument.note;
     instrument.note = tuning * Math.pow(2, instrument.semitone/12);
-    if (instrument.active) instrument.player.frequency.rampTo(instrument.note, config.instrument.portamento);
+    if (instrument.active && instrument.note !== older_note) instrument.player.frequency.rampTo(instrument.note, config.instrument.portamento);
 }
 
 //find the nearest semitone matching the scale of the config.
@@ -239,14 +305,38 @@ function toggleInstrument(isActive) {
 
 //update instrument settings on the synthetizer from the config
 function updateInstrumentSettings() {
-    //ADSR envelope
-    instrument.player.envelope.attack = config.instrument.envelope.attack;
-    instrument.player.envelope.decay = config.instrument.envelope.decay;
-    instrument.player.envelope.sustain = config.instrument.envelope.sustain;
-    instrument.player.envelope.release = config.instrument.envelope.release;
+    
+    instrument.player.set({
+        volume: config.instrument.volume,
+        envelope: { //ADSR envelope
+            attack: config.instrument.envelope.attack,
+            decay: config.instrument.envelope.decay,
+            sustain: config.instrument.envelope.sustain,
+            release: config.instrument.envelope.release,
+        },
+        oscillator: { //oscillator type
+            type: config.instrument.oscillator.type,
+        }
+    });
 
-    //oscillator type
-    instrument.player.oscillator.type = config.instrument.oscillator.type;
+    //feedback delay
+    instrument.feedbackDelay.set({
+        delayTime: config.instrument.effect.feedbackDelay.speed + "n",
+        feedback: config.instrument.effect.feedbackDelay.feedback,
+        wet: config.instrument.effect.feedbackDelay.dryWet,
+    });
+
+    //reverb
+    instrument.reverb.set({
+        preDelay: config.instrument.effect.reverb.preDelay,
+        decay: config.instrument.effect.reverb.decay,
+        wet: config.instrument.effect.reverb.dryWet,
+    });
+
+    //stereo widener
+    instrument.widener.set({
+        width: config.instrument.effect.widener.width,
+    })
 }
 
 
